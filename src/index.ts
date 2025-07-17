@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { cheerio } from '@winner-fed/utils';
+import { cheerio, logger } from '@winner-fed/utils';
 import type { IApi } from '@winner-fed/winjs';
 
 interface SecurityConfig {
@@ -63,7 +63,7 @@ export default (api: IApi) => {
             );
             source = readFileSync(resourcePath);
           } catch (error) {
-            console.warn(`无法读取资源文件: ${resourceUrl}`, error);
+            logger.warn(`无法读取资源文件: ${resourceUrl}`, error);
             return;
           }
 
