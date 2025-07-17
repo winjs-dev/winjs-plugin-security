@@ -1,6 +1,6 @@
 {
   "name": "@winner-fed/plugin-security",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "repository": "https://github.com/winjs-dev/winjs-plugin-security",
   "license": "MIT",
   "type": "module",
