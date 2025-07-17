@@ -38,7 +38,7 @@ export default defineConfig({
 - **默认值**: 需要手动设置
 - **描述**: 是否启用 SRI（子资源完整性）功能，以及可选的哈希算法配置
 
-当设置为 `true` 时，插件会：
+当设置为 `true` 或 `{}` 时，插件会：
 
 1. 扫描构建后的 HTML 文件
 2. 为所有带有 `src` 属性的 `<script>` 标签添加 `integrity` 属性
@@ -59,4 +59,47 @@ security: {
 
 ### 输入 HTML
 
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/assets/app.css">
+</head>
+<body>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
 ```
+
+### 输出 HTML（启用 SRI 后）
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/assets/app.css" integrity="sha512-ABC123..." crossorigin="anonymous">
+</head>
+<body>
+  <script src="/assets/app.js" integrity="sha512-XYZ789..." crossorigin="anonymous"></script>
+</body>
+</html>
+```
+
+## 安全说明
+
+SRI（子资源完整性）是一种安全特性，允许浏览器验证获取的资源（例如从 CDN 获取的资源）没有被恶意修改。当浏览器加载资源时，会计算资源的哈希值并与 `integrity` 属性中指定的哈希值进行比较。如果哈希值不匹配，浏览器将拒绝加载该资源。
+
+对于 `<script>` 标签来说，结果为拒绝执行其中的代码；对于 CSS links 来说，结果为不加载其中的样式。
+
+关于 SRI 的更多内容，可以查看 [Subresource Integrity - MDN](https://developer.mozilla.org/zh-CN/docs/Web/Security/Subresource_Integrity)。
+
+## 注意事项
+
+1. 此插件仅在生产构建时生效，开发环境会自动跳过
+2. 需要确保资源文件在构建输出目录中可访问
+3. `integrity` 属性必须与 `crossorigin` 属性配合使用才能正常工作
+
+## 许可证
+
+MIT
+
