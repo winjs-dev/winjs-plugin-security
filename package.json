@@ -28,15 +28,14 @@
     "pre-commit": "npm run lint:write"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@playwright/test": "^1.49.0",
-    "@winner-fed/winjs": "^0.15.0",
-    "@winner-fed/utils": "^0.15.0",
-    "@rslib/core": "^0.1.1",
-    "@types/node": "^22.10.1",
-    "playwright": "^1.49.0",
-    "simple-git-hooks": "^2.11.1",
-    "typescript": "^5.7.2"
+    "@biomejs/biome": "^2.1.1",
+    "@playwright/test": "^1.53.2",
+    "@rsbuild/core": "^1.4.2",
+    "@rslib/core": "^0.10.4",
+    "@types/node": "^22.15.34",
+    "playwright": "^1.53.2",
+    "simple-git-hooks": "^2.13.0",
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "@rsbuild/core": "1.x",
