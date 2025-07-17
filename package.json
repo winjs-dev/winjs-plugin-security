@@ -31,11 +31,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.1.1",
-    "@playwright/test": "^1.53.2",
-    "@rsbuild/core": "^1.4.2",
-    "@rslib/core": "^0.10.4",
-    "@types/node": "^22.15.34",
-    "playwright": "^1.53.2",
+    "@playwright/test": "^1.54.1",
+    "@rsbuild/core": "^1.4.7",
+    "@rslib/core": "^0.10.6",
+    "@types/node": "^22.16.4",
+    "playwright": "^1.54.1",
     "simple-git-hooks": "^2.13.0",
     "typescript": "^5.8.3"
   },
