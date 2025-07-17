@@ -1,54 +1,90 @@
-# winjs-plugin-example
+# winjs-plugin-security
 
-Example plugin for WinJS.
+一个为 WinJS 项目提供安全增强功能的插件，主要用于生成 SRI（Subresource Integrity）属性。
 
-<p>
-  <a href="https://npmjs.com/package/winjs-plugin-example">
-   <img src="https://img.shields.io/npm/v/winjs-plugin-example?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" />
-  </a>
-  <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="license" />
-  <a href="https://npmcharts.com/compare/winjs-plugin-example?minimal=true"><img src="https://img.shields.io/npm/dm/winjs-plugin-example.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="downloads" /></a>
-</p>
+## 功能特性
 
-## Usage
+- 自动为 HTML 文件中的 `<script>` 和 `<link>` 标签生成 SRI 属性
+- 支持 SHA-512 哈希算法
+- 自动添加 `crossorigin="anonymous"` 属性以确保 SRI 正常工作
+- 仅在生产环境下生效，开发环境自动跳过
 
-Install:
+## 安装
 
 ```bash
-npm add winjs-plugin-example -D
+pnpm add @winner-fed/winjs-plugin-security
 ```
 
-Add plugin to your `.winrc.ts`:
+## 使用方法
 
-```ts
-// .winrc.ts
-export default {
-  plugins: ['winjs-plugin-example'],
-  // 开启配置
-  example: {}
-};
+在你的 `.winrc.ts` 配置文件中添加插件配置：
+
+```typescript
+import { defineConfig } from '@winner-fed/winjs';
+
+export default defineConfig({
+  plugins: ['@winner-fed/winjs-plugin-security'],
+  security: {
+    sri: true // 启用 SRI 功能
+  },
+});
 ```
 
-## Options
+## 配置选项
 
-### foo
+### `sri`
 
-Some description.
+- **类型**: `boolean`
+- **默认值**: 需要手动设置
+- **描述**: 是否启用 SRI（子资源完整性）功能
 
-- Type: `string`
-- Default: `undefined`
-- Example:
+当设置为 `true` 时，插件会：
 
-```js
-export default {
-  plugins: ['winjs-plugin-example'],
-  // 开启配置
-  example: {
-    foo: 'bar'
-  }
-};
+1. 扫描构建后的 HTML 文件
+2. 为所有带有 `src` 属性的 `<script>` 标签添加 `integrity` 属性
+3. 为所有带有 `href` 属性的 `<link>` 标签添加 `integrity` 属性
+4. 自动添加 `crossorigin="anonymous"` 属性（如果不存在）
+
+## 示例
+
+### 输入 HTML
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/assets/app.css">
+</head>
+<body>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
 ```
 
-## License
+### 输出 HTML（启用 SRI 后）
 
-[MIT](./LICENSE).
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/assets/app.css" integrity="sha512-ABC123..." crossorigin="anonymous">
+</head>
+<body>
+  <script src="/assets/app.js" integrity="sha512-XYZ789..." crossorigin="anonymous"></script>
+</body>
+</html>
+```
+
+## 安全说明
+
+SRI（子资源完整性）是一种安全特性，允许浏览器验证获取的资源（例如从 CDN 获取的资源）没有被恶意修改。当浏览器加载资源时，会计算资源的哈希值并与 `integrity` 属性中指定的哈希值进行比较。如果哈希值不匹配，浏览器将拒绝加载该资源。
+
+## 注意事项
+
+1. 此插件仅在生产构建时生效，开发环境会自动跳过
+2. 需要确保资源文件在构建输出目录中可访问
+3. `integrity` 属性必须与 `crossorigin` 属性配合使用才能正常工作
+
+## 许可证
+
+MIT

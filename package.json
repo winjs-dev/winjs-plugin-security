@@ -1,7 +1,7 @@
 {
-  "name": "winjs-plugin-example",
+  "name": "@winner-fed/winjs-plugin-security",
   "version": "0.0.0",
-  "repository": "https://github.com/winjs-dev/winjs-plugin-template",
+  "repository": "https://github.com/winjs-dev/winjs-plugin-security",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -30,8 +30,8 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@playwright/test": "^1.49.0",
-    "@winner-fed/winjs": "^0.11.21",
-    "@winner-fed/utils": "^0.11.21",
+    "@winner-fed/winjs": "^0.15.0",
+    "@winner-fed/utils": "^0.15.0",
     "@rslib/core": "^0.1.1",
     "@types/node": "^22.10.1",
     "playwright": "^1.49.0",
@@ -40,8 +40,8 @@
   },
   "peerDependencies": {
     "@rsbuild/core": "1.x",
-    "@winner-fed/winjs": "^0.11.21",
-    "@winner-fed/utils": "^0.11.21"
+    "@winner-fed/winjs": "^0.15.0",
+    "@winner-fed/utils": "^0.15.0"
   },
   "peerDependenciesMeta": {
     "@rsbuild/core": {
@@ -51,7 +51,6 @@
       "optional": true
     }
   },
-  "packageManager": "pnpm@9.14.4",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
