@@ -5,9 +5,11 @@ import { cheerio, logger } from '@winner-fed/utils';
 import type { IApi } from '@winner-fed/winjs';
 
 interface SecurityConfig {
-  sri: boolean | {
-    algorithm: 'sha256' | 'sha384' | 'sha512';
-  };
+  sri:
+    | boolean
+    | {
+        algorithm: 'sha256' | 'sha384' | 'sha512';
+      };
 }
 
 export default (api: IApi) => {
@@ -20,9 +22,11 @@ export default (api: IApi) => {
           sri: zod.union([
             zod.boolean(),
             zod.object({
-              algorithm: zod.enum(['sha256', 'sha384', 'sha512']).default('sha512'),
-            })
-          ])
+              algorithm: zod
+                .enum(['sha256', 'sha384', 'sha512'])
+                .default('sha512'),
+            }),
+          ]),
         });
       },
     },
@@ -42,7 +46,11 @@ export default (api: IApi) => {
       let sriConfig: { algorithm: 'sha256' | 'sha384' | 'sha512' };
       if (config.sri === true) {
         sriConfig = { algorithm: 'sha512' };
-      } else if (typeof config.sri === 'object' && config.sri !== null && typeof (config.sri as any).algorithm === 'string') {
+      } else if (
+        typeof config.sri === 'object' &&
+        config.sri !== null &&
+        typeof (config.sri as any).algorithm === 'string'
+      ) {
         sriConfig = { algorithm: (config.sri as any).algorithm };
       } else {
         // 未指定算法时，默认 sha512
@@ -86,7 +94,9 @@ export default (api: IApi) => {
           }
 
           if (source) {
-            const hash = createHash(sriConfig.algorithm).update(source).digest('base64');
+            const hash = createHash(sriConfig.algorithm)
+              .update(source)
+              .digest('base64');
 
             $el.attr('integrity', `${sriConfig.algorithm}-${hash}`);
 
