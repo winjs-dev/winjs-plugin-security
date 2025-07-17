@@ -12,7 +12,7 @@
 ## 安装
 
 ```bash
-pnpm add @winner-fed/winjs-plugin-security
+pnpm add @winner-fed/plugin-security
 ```
 
 ## 使用方法
@@ -23,7 +23,7 @@ pnpm add @winner-fed/winjs-plugin-security
 import { defineConfig } from '@winner-fed/winjs';
 
 export default defineConfig({
-  plugins: ['@winner-fed/winjs-plugin-security'],
+  plugins: ['@winner-fed/plugin-security'],
   security: {
     sri: true // 启用 SRI 功能
   },
