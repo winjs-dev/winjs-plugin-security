@@ -5,7 +5,9 @@ import { cheerio, logger } from '@winner-fed/utils';
 import type { IApi } from '@winner-fed/winjs';
 
 interface SecurityConfig {
-  sri: boolean;
+  sri: boolean | {
+    algorithm: 'sha256' | 'sha384' | 'sha512';
+  };
 }
 
 export default (api: IApi) => {
@@ -15,7 +17,12 @@ export default (api: IApi) => {
     config: {
       schema({ zod }) {
         return zod.object({
-          sri: zod.boolean(),
+          sri: zod.union([
+            zod.boolean(),
+            zod.object({
+              algorithm: zod.enum(['sha256', 'sha384', 'sha512']).default('sha512'),
+            })
+          ])
         });
       },
     },
@@ -26,9 +33,20 @@ export default (api: IApi) => {
     async (html: { htmlFiles?: Array<{ path: string; content: string }> }) => {
       const config = api.config.security as SecurityConfig;
 
-      // 只有当 sri 配置为 true 时才生成 SRI
+      // 只有当 sri 配置为 true 或对象时才生成 SRI
       if (!config?.sri) {
         return;
+      }
+
+      // 处理 sri 配置，支持 boolean 和对象
+      let sriConfig: { algorithm: 'sha256' | 'sha384' | 'sha512' };
+      if (config.sri === true) {
+        sriConfig = { algorithm: 'sha512' };
+      } else if (typeof config.sri === 'object' && config.sri !== null && typeof (config.sri as any).algorithm === 'string') {
+        sriConfig = { algorithm: (config.sri as any).algorithm };
+      } else {
+        // 未指定算法时，默认 sha512
+        sriConfig = { algorithm: 'sha512' };
       }
 
       const htmlFiles = html?.htmlFiles || [];
@@ -68,9 +86,9 @@ export default (api: IApi) => {
           }
 
           if (source) {
-            const hash = createHash('sha512').update(source).digest('base64');
+            const hash = createHash(sriConfig.algorithm).update(source).digest('base64');
 
-            $el.attr('integrity', `sha512-${hash}`);
+            $el.attr('integrity', `${sriConfig.algorithm}-${hash}`);
 
             // https://developer.mozilla.org/zh-CN/docs/Web/HTML/Attributes/crossorigin
             // 在进行跨域资源请求时，integrity 必须配合 crossorigin 使用，不然浏览器会丢弃这个资源的请求
